@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>TogetherJS Test</title>
+    <link rel="stylesheet" href="lib/codemirror.css">
+</head>
+<body>
+
+    <textarea id="text"></textarea>
+    <canvas id="myCanvas"></canvas>
+
+    <button onclick="TogetherJS(this); return false;">Start TogetherJS</button>
+    <script src="https://togetherjs.com/togetherjs-min.js"></script>
+    <script src="lib/codemirror.js"></script>
+    <script>
+        var myTextarea = document.getElementById('text');
+        var editor = CodeMirror.fromTextArea(myTextarea, {
+            lineNumbers: true
+        });
+    </script>
+    <script>
+        var mainCanvas = document.getElementById("myCanvas");
+		var mainContext = mainCanvas.getContext('2d');
+		var canvasWidth = mainCanvas.width = 450;
+		var canvasHeight = mainCanvas.height = 450;
+
+		var angle = 0;
+
+		var requestAnimationFrame = window.requestAnimationFrame || 
+									window.mozRequestAnimationFrame || 
+									window.webkitRequestAnimationFrame || 
+									window.msRequestAnimationFrame;
+
+		(function drawCircle() {
+			mainContext.clearRect(0, 0, canvasWidth, canvasHeight);
+			mainContext.fillStyle = "#EEEEEE";
+			mainContext.fillRect(0, 0, canvasWidth, canvasHeight);
+			mainContext.beginPath();
+			var radius = 25 + 150 * Math.abs(Math.cos(angle));
+			mainContext.arc(225, 225, radius, 0, Math.PI * 2, false);
+			mainContext.closePath();
+			mainContext.fillStyle = "#000000";
+			mainContext.fill();
+			angle += Math.PI / 200;
+			requestAnimationFrame(drawCircle);
+		})();
+    </script>
+</body>
+</html>
