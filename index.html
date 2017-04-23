@@ -7,11 +7,16 @@
 <body>
 
     <textarea id="text"></textarea>
-    <canvas id="myCanvas"></canvas>
+    <canvas width="450px" height="450px" id="myCanvas"></canvas>
 
     <button onclick="TogetherJS(this); return false;">Start TogetherJS</button>
+    <button onclick="start()">Start Capture</button>
+    <button onclick="stop()">Save Capture</button>
     <script src="https://togetherjs.com/togetherjs-min.js"></script>
     <script src="lib/codemirror.js"></script>
+    <script src="CCapture.min.js"></script>
+    <script src="whammy.js"></script>
+    <script src="download.js"></script>
     <script>
         var myTextarea = document.getElementById('text');
         var editor = CodeMirror.fromTextArea(myTextarea, {
@@ -19,10 +24,11 @@
         });
     </script>
     <script>
+        var capturer = new CCapture( { format: 'webm' }  );
         var mainCanvas = document.getElementById("myCanvas");
 		var mainContext = mainCanvas.getContext('2d');
-		var canvasWidth = mainCanvas.width = 450;
-		var canvasHeight = mainCanvas.height = 450;
+		var canvasWidth = 450;
+		var canvasHeight = 450;
 
 		var angle = 0;
 
@@ -31,6 +37,13 @@
 									window.webkitRequestAnimationFrame || 
 									window.msRequestAnimationFrame;
 
+        function start () {
+            capturer.start();
+        }
+        function stop () {
+            capturer.stop();
+            capturer.save();
+        }
 		(function drawCircle() {
 			mainContext.clearRect(0, 0, canvasWidth, canvasHeight);
 			mainContext.fillStyle = "#EEEEEE";
@@ -43,6 +56,7 @@
 			mainContext.fill();
 			angle += Math.PI / 200;
 			requestAnimationFrame(drawCircle);
+            capturer.capture(mainCanvas);
 		})();
     </script>
 </body>
